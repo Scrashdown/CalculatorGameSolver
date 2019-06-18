@@ -13,7 +13,7 @@ if it can't display a number.
 
 **TODO:**
 * Check if this is true
-* Check the maximum numbers of symbols
+* Check the maximum numbers of symbols (appears to be 6, check thoroughly)
 * Check if the minus sign and decimal point are counted in the number of displayed symbols
 
 ## Maximum number of moves
