@@ -12,9 +12,9 @@ as long as its exact representation fits on the screen. Can also display `ERROR`
 if it can't display a number.
 
 **TODO:**
-[] Check if this is true
-[] Check the maximum numbers of symbols
-[] Check if the minus sign and decimal point are counted in the number of displayed symbols
+* Check if this is true
+* Check the maximum numbers of symbols
+* Check if the minus sign and decimal point are counted in the number of displayed symbols
 
 ## Maximum number of moves
 Whole number > 0
@@ -23,7 +23,7 @@ Whole number > 0
 Any number
 
 **TODO:**
-[] Should the goal always be a whole number?
+* Should the goal always be a whole number?
 
 ## Buttons
 
