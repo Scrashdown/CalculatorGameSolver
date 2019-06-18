@@ -27,6 +27,8 @@ Any number
 
 ## Buttons
 
+Note: all numbers in buttons are whole numbers
+
 * `+X` / `-X` / `xX` / `/X` (dark gray) Add / subtract / multiply / divide by X
 * `+/-` (orange) Switch number sign
 * `x^P` (orange) Raise number to power P (**TODO:** what happens with dot and sign?)
@@ -37,4 +39,4 @@ Any number
 * `<<` (orange) Right decimal shift (if only one number remaining, becomes 0, **TODO:** what happens with dot?, what happens with minus sign?)
 * `Reverse` (orange) Reverse all characters on the screen (**TODO:** how does it work with dot?, what happens with minus sign?)
 * `Shift >` / `< Shift` (orange) Decimal rollover left/right shift (SLL/SRL), CAREFUL training zeroes on the right are eliminated by the shift (**TODO:** what happens with sign?) (10 -> 1, not 01)
-* `[+] X` (orange) Add **X** to all "number buttons"
+* `[+] X` (orange) Add **X** to all "number buttons" (but not itself) (**TODO:** does it also work with 'substitution' button?)
