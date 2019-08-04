@@ -5,7 +5,7 @@ MAX_SCREEN_SYMBOL_NUMBER = 6
 class ScreenNumber:
     value: float = 0.0
 
-    def __init__(self, value: float = 0.0):
+    def __init__(self, value: float):
         self.value = value
 
     def __repr__(self) -> str:
@@ -28,9 +28,9 @@ class Screen:
 
     def __init__(self, number: ScreenNumber):
         # Set screen with number
-        self.update_screen(number)
+        self.update(number)
 
-    def update_screen(self, number: ScreenNumber) -> None:
+    def update(self, number: ScreenNumber) -> None:
         # Check that the number fits
         if number.length() > self.max_symbol_number:
             self.screen_number = None
@@ -38,6 +38,16 @@ class Screen:
         else:
             self.screen_number = number
             self.display = str(number)
+
+    def update(self, number: float) -> None:
+        self.update(ScreenNumber(number))
+
+    def update(self, string: str) -> None:
+        try:
+            self.update(float(string))
+        except ValueError:
+            self.screen_number = None
+            self.display = self.error_message
     
     def is_valid(self) -> bool:
         return self.screen_number != None
