@@ -33,10 +33,10 @@ Note: all numbers in buttons are whole numbers
 * `+/-` (orange) Switch number sign
 * `x^P` (orange) Raise number to power P (**TODO:** what happens with dot and sign?)
 * `X -> Y` (orange) Replace all occurrences of sequence X to sequence Y (**TODO:** what if these sequences can be overlapping?, can any sequence be negative? E.g. 11 in 111)
-* `X` (purple) Concatenate **X** on the right
+* `X` (purple) Concatenate **X** on the right (**TODO:** what happens with dots and signs?)
 * `MIRROR` (orange) Concatenate on the right a mirrored version of the current numbers (how does it work with dot?, what happens with minus sign?)
 * `SUM` (orange) Sum of all numbers on the screen (**TODO:** what happens with minus sign?)
 * `<<` (orange) Right decimal shift (if only one number remaining, becomes 0, **TODO:** what happens with dot?, what happens with minus sign?)
 * `Reverse` (orange) Reverse all characters on the screen (**TODO:** how does it work with dot?, what happens with minus sign?)
 * `Shift >` / `< Shift` (orange) Decimal rollover left/right shift (SLL/SRL), CAREFUL training zeroes on the right are eliminated by the shift (**TODO:** what happens with sign?) (10 -> 1, not 01)
-* `[+] X` (orange) Add **X** to all "number buttons" (but not itself) (**TODO:** does it also work with 'substitution' button?)
+* `[+] X` (orange) Add **X** to all "number buttons" (but not itself) (**TODO:** does it also work with 'substitution' button?, **TODO:** can we have negative increments?)
