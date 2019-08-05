@@ -34,7 +34,7 @@ Note: all numbers in buttons are whole numbers
 * `x^P` (orange) Raise number to power P (**TODO:** what happens with dot and sign?)
 * `X -> Y` (orange) Replace all occurrences of sequence X to sequence Y (**TODO:** what if these sequences can be overlapping?, can any sequence be negative? E.g. 11 in 111)
 * `X` (purple) Concatenate **X** on the right (**TODO:** what happens with dots and signs?)
-* `MIRROR` (orange) Concatenate on the right a mirrored version of the current numbers (how does it work with dot?, what happens with minus sign?)
+* `MIRROR` (orange) Concatenate on the right a mirrored version of the current numbers. If there is a minus sign, -x becomes -xx. If there is a dot, we get ERROR.
 * `SUM` (orange) Sum of all numbers on the screen (**TODO:** what happens with minus sign?)
 * `<<` (orange) Right decimal shift (if only one number remaining, becomes 0, **TODO:** what happens with dot?, what happens with minus sign?)
 * `Reverse` (orange) Reverse all characters on the screen (**TODO:** how does it work with dot?, what happens with minus sign?)
