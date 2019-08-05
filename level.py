@@ -29,7 +29,7 @@ class Level:
         self.goal = goal
         self.max_moves = max_moves
 
-    def solve(self, solve_all = False) -> List[List[Button]]:
+    def solve(self, solve_all = False, debug = False) -> List[List[Button]]:
         solutions = []
         # Iterate over all possible button combinations
         # TODO: self.init_buttons or self.buttons? self.buttons seems more appropriate, but we will modify the buttons we're iterating on.
@@ -41,8 +41,12 @@ class Level:
 
             for button in combination:
                 button.press(self.screen, self.buttons)
+            
+            if debug:
+                print(f"Testing combination {combination}:")
+                print(f"Result: {self.screen.screen_number.value}")
 
-            if self.screen.screen_number.value == self.goal.value:
+            if self.screen.screen_number is not None and self.screen.screen_number.value == self.goal.value:
                 solutions.append(combination)
                 if not solve_all:
                     return solutions
