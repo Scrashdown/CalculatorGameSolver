@@ -5,19 +5,22 @@ MAX_SCREEN_SYMBOL_NUMBER = 6
 class ScreenNumber:
     value: float = 0.0
 
+    @staticmethod
+    def str(value: float) -> str:
+        # Remove trailing .0 if the number has no fractional part
+        value_str = str(value)
+        if value_str.endswith('.0'):
+            value_str = value_str[:-2]
+        return value_str
+
     def __init__(self, value: float):
         self.value = value
 
     def __repr__(self) -> str:
-        value_str = str(self.value)
-        fractional_part = self.value - int(self.value)
-        # Remove trailing .0 if the number has no fractional part
-        if fractional_part == 0.0:
-            return value_str[:-2]
-        return value_str
+        return ScreenNumber.str(self.value)
 
     def length(self) -> int:
-        return len(str(self))
+        return len(ScreenNumber.str(self))
 
 class Screen:
     screen_number: ScreenNumber = None
@@ -37,14 +40,14 @@ class Screen:
             self.display = self.error_message
         else:
             self.screen_number = number
-            self.display = str(number)
+            self.display = ScreenNumber.str(number)
 
-    def update(self, number: float) -> None:
+    def update_float(self, number: float) -> None:
         self.update(ScreenNumber(number))
 
-    def update(self, string: str) -> None:
+    def update_str(self, string: str) -> None:
         try:
-            self.update(float(string))
+            self.update_float(float(string))
         except ValueError:
             self.screen_number = None
             self.display = self.error_message
