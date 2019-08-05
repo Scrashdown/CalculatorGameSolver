@@ -14,7 +14,7 @@ class ScreenNumber:
         return value_str
 
     def __init__(self, value: float):
-        self.value = value
+        self.value = float(value)
 
     def __repr__(self) -> str:
         return ScreenNumber.str(self.value)
@@ -36,8 +36,7 @@ class Screen:
     def update(self, number: ScreenNumber) -> None:
         # Check that the number fits
         if number.length() > self.max_symbol_number:
-            self.screen_number = None
-            self.display = self.error_message
+            self.set_error()
         else:
             self.screen_number = number
             self.display = ScreenNumber.str(number)
@@ -49,8 +48,11 @@ class Screen:
         try:
             self.update_float(float(string))
         except ValueError:
-            self.screen_number = None
-            self.display = self.error_message
-    
+            self.set_error()
+
+    def set_error(self) -> None:
+        self.screen_number = None
+        self.display = self.error_message
+
     def is_valid(self) -> bool:
         return self.screen_number != None
