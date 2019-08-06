@@ -7,10 +7,13 @@ class ScreenNumber:
 
     @staticmethod
     def str(value: float) -> str:
-        # Remove trailing .0 if the number has no fractional part
         value_str = str(value)
+        # Remove trailing .0 if the number has no fractional part
         if value_str.endswith('.0'):
             value_str = value_str[:-2]
+        # Remove front sign for -0 special case
+        if value_str == '-0':
+            value_str = value_str[1:]
         return value_str
 
     def __init__(self, value: float):
