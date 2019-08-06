@@ -182,15 +182,18 @@ class RightShiftButton(NoNumButton):
     def press(self, screen: Screen, buttons: Set[Button]) -> None:
         if screen.screen_number is None:
             return
-        # TODO: clarify in-game behaviour with dot and sign
-        screen_repr = ScreenNumber.str(screen.screen_number.value)
-        if screen_repr.startswith('-') and len(screen_repr) < 3:
-            new_screen_repr = '0'
-        elif len(screen_repr) < 2:
-            new_screen_repr = '0'
+
+        if not screen.screen_number.value.is_integer():
+            screen.set_error()
         else:
-            new_screen_repr = screen_repr[:-1]
-        screen.update_str(new_screen_repr)
+            screen_repr = ScreenNumber.str(screen.screen_number.value)
+            if screen_repr.startswith('-') and len(screen_repr) < 3:
+                new_screen_repr = '0'
+            elif len(screen_repr) < 2:
+                new_screen_repr = '0'
+            else:
+                new_screen_repr = screen_repr[:-1]
+            screen.update_str(new_screen_repr)
 
 
 class ReverseButton(NoNumButton):
@@ -224,18 +227,60 @@ class SumButton(NoNumButton):
         if screen.screen_number is None:
             return
 
-        # TODO: clarify what happens with sign
+        if not screen.screen_number.value.is_integer():
+            # Yield error if the number is not whole
+            screen.set_error()
+        else:
+            # Compute sum of digits and keep sign
+            screen_repr = ScreenNumber.str(screen.screen_number.value)
+            sign = 1 if screen.screen_number.value >= 0 else -1
+            digits = screen_repr if sign == 1 else screen_repr[1:]
+            digit_sum: int = sum(map(int, digits))
+            screen.update_float(float(sign * digit_sum))
+
+
+class RSLButton(NoNumButton):
+    def __repr__(self) -> str:
+        return "Shift <"
+
+    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+        if screen.screen_number is None:
+            return
+
+        # TODO: what happens with dot
 
         if not screen.screen_number.value.is_integer():
             # Yield error if the number is not whole
             screen.set_error()
         else:
+            # Keep sign in front
             screen_repr = ScreenNumber.str(screen.screen_number.value)
             sign = 1 if screen.screen_number.value >= 0 else -1
             digits = screen_repr if sign == 1 else screen_repr[1:]
-            digit_sum: int = sum(map(int, digits))
-            # TODO: check if need to multiply by sign
-            screen.update_float(float(sign * digit_sum))
+            shifted = ('' if sign == 1 else '-') + digits[1:] + digits[0]
+            screen.update_str(shifted)
+
+
+class RSRButton(NoNumButton):
+    def __repr__(self) -> str:
+        return "Shift >"
+
+    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+        if screen.screen_number is None:
+            return
+
+        # TODO: what happens with dot
+
+        if not screen.screen_number.value.is_integer():
+            # Yield error if the number is not whole
+            screen.set_error()
+        else:
+            # Keep sign in front
+            screen_repr = ScreenNumber.str(screen.screen_number.value)
+            sign = 1 if screen.screen_number.value >= 0 else -1
+            digits = screen_repr if sign == 1 else screen_repr[1:]
+            shifted = ('' if sign == 1 else '-') + digits[-1] + digits[:-1]
+            screen.update_str(shifted)
 
 
 class IncrementButtonsButton(OneNumButton):
