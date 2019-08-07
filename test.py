@@ -1,14 +1,12 @@
 from level import *
 
-init_screen = ScreenNumber(128)
+init_screen = ScreenNumber(10)
 buttons = [
-    MulButton(4),
-    DivButton(4),
-    SumButton(),
-    ReplaceButton(5, 16)
+    AddSubButton(2),
+    IncrementButtonsButton(1)
 ]
-goal = ScreenNumber(64)
-max_moves = 4
+goal = ScreenNumber(15)
+max_moves = 3
 
 level = Level(init_screen, buttons, goal, max_moves)
-print(list(level.solve(solve_all=True)))
+print(list(level.solve(solve_all = True)))
