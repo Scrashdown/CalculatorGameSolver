@@ -1,13 +1,13 @@
 from level import *
 
-init_screen = ScreenNumber(0)
+init_screen = ScreenNumber(25)
 buttons = [
-    AddSubButton(-2),
-    AddSubButton(5),
+    AddSubButton(8),
     MulButton(2),
+    MulButton(5),
     IncrementButtonsButton(1)
 ]
-goal = ScreenNumber(42)
+goal = ScreenNumber(268)
 max_moves = 5
 
 level = Level(init_screen, buttons, goal, max_moves)
