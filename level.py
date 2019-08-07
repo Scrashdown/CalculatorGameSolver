@@ -39,8 +39,15 @@ class Level:
             # If it does, add it to the solutions list
             combination = list(combination)
 
+            # TODO: increment button increments self.buttons but not combination, but passing combination does not work either
             for button in combination:
-                button.press(self.screen, self.buttons)
+                # button.press(self.screen, combination)
+                if type(button) is not IncrementButtonsButton:
+                    button.press(self.screen, combination)
+                else:
+                    print(f"Buttons before: {combination}")
+                    button.press(self.screen, combination)
+                    print(f"Buttons after: {combination}")
             
             if debug:
                 print(f"Testing combination {combination}:")
