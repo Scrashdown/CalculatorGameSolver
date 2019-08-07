@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Set
+from typing import List
 from screen import Screen, ScreenNumber
 
 
@@ -26,7 +26,8 @@ class OneNumButton(Button):
     value: int
 
     def increment_numbers(self, increment: int) -> None:
-        self.value += increment
+        # If the value is negative, it actually is decremented
+        self.value += (increment if self.value >= 0 else -increment)
 
 
 class TwoNumButton(Button):
@@ -34,8 +35,8 @@ class TwoNumButton(Button):
     value2: int
 
     def increment_numbers(self, increment: int) -> None:
-        self.value1 += increment
-        self.value2 += increment
+        self.value1 += (increment if self.value1 >= 0 else -increment)
+        self.value2 += (increment if self.value2 >= 0 else -increment)
 
 
 class AddSubButton(OneNumButton):
@@ -45,7 +46,7 @@ class AddSubButton(OneNumButton):
     def __repr__(self) -> str:
         return f"+{self.value}" if self.value > 0 else f"-{-self.value}"
 
-    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+    def press(self, screen: Screen, buttons: List[Button]) -> None:
         if screen.screen_number is None:
             return
         new_value: float = screen.screen_number.value + self.value
@@ -59,7 +60,7 @@ class MulButton(OneNumButton):
     def __repr__(self) -> str:
         return f"x{self.value}"
 
-    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+    def press(self, screen: Screen, buttons: List[Button]) -> None:
         if screen.screen_number is None:
             return
         new_value: float = screen.screen_number.value * self.value
@@ -74,7 +75,7 @@ class DivButton(OneNumButton):
     def __repr__(self) -> str:
         return f"/{self.value}"
 
-    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+    def press(self, screen: Screen, buttons: List[Button]) -> None:
         if screen.screen_number is None:
             return
         new_value: float = screen.screen_number.value / self.value
@@ -85,7 +86,7 @@ class SwitchSignButton(NoNumButton):
     def __repr__(self) -> str:
         return "+/-"
 
-    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+    def press(self, screen: Screen, buttons: List[Button]) -> None:
         if screen.screen_number is None:
             return
         new_value: float = -screen.screen_number.value
@@ -99,7 +100,7 @@ class PowerButton(OneNumButton):
     def __repr__(self) -> str:
         return f"x^{self.value}"
 
-    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+    def press(self, screen: Screen, buttons: List[Button]) -> None:
         if screen.screen_number is None:
             return
         new_value: float = screen.screen_number.value ** self.value
@@ -114,7 +115,7 @@ class ReplaceButton(TwoNumButton):
     def __repr__(self) -> str:
         return f"{self.value1} -> {self.value2}"
 
-    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+    def press(self, screen: Screen, buttons: List[Button]) -> None:
         if screen.screen_number is None:
             return
         # TODO: make sure it follows the game's behaviour
@@ -139,7 +140,7 @@ class ConcButton(OneNumButton):
     def __repr__(self) -> str:
         return f"{self.value}"
 
-    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+    def press(self, screen: Screen, buttons: List[Button]) -> None:
         if screen.screen_number is None:
             return
         # TODO: can the concatenated number have a dot or a sign?
@@ -157,7 +158,7 @@ class MirrorButton(NoNumButton):
     def __repr__(self) -> str:
         return "MIRROR"
 
-    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+    def press(self, screen: Screen, buttons: List[Button]) -> None:
         if screen.screen_number is None:
             return
         # ERROR if the number is not whole
@@ -179,7 +180,7 @@ class RightShiftButton(NoNumButton):
     def __repr__(self) -> str:
         return "<<"
 
-    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+    def press(self, screen: Screen, buttons: List[Button]) -> None:
         if screen.screen_number is None:
             return
 
@@ -200,7 +201,7 @@ class ReverseButton(NoNumButton):
     def __repr__(self) -> str:
         return "Reverse"
 
-    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+    def press(self, screen: Screen, buttons: List[Button]) -> None:
         if screen.screen_number is None:
             return
 
@@ -223,7 +224,7 @@ class SumButton(NoNumButton):
     def __repr__(self) -> str:
         return "SUM"
 
-    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+    def press(self, screen: Screen, buttons: List[Button]) -> None:
         if screen.screen_number is None:
             return
 
@@ -243,7 +244,7 @@ class RSLButton(NoNumButton):
     def __repr__(self) -> str:
         return "Shift <"
 
-    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+    def press(self, screen: Screen, buttons: List[Button]) -> None:
         if screen.screen_number is None:
             return
 
@@ -265,7 +266,7 @@ class RSRButton(NoNumButton):
     def __repr__(self) -> str:
         return "Shift >"
 
-    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+    def press(self, screen: Screen, buttons: List[Button]) -> None:
         if screen.screen_number is None:
             return
 
@@ -284,15 +285,15 @@ class RSRButton(NoNumButton):
 
 
 class IncrementButtonsButton(OneNumButton):
-    value: int = 0
+    value: int
 
     def __init__(self, value: int):
         self.value = value
 
     def __repr__(self) -> str:
-        return f"[+]{self.value}" if self.value > 0 else f"[-]{-self.value}"
+        return f"[+] {self.value}" if self.value > 0 else f"[- {-self.value}"
 
-    def press(self, screen: Screen, buttons: Set[Button]) -> None:
+    def press(self, screen: Screen, buttons: List[Button]) -> None:
         if screen.screen_number is None:
             return
         for b in buttons:

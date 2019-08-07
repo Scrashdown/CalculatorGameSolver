@@ -40,4 +40,4 @@ Note: all numbers in buttons are whole numbers
 * `<<` (orange) Right decimal shift (if only one number remaining, positive or negative, becomes 0. If the number is negative, yields error.)
 * `Reverse` (orange) Reverse all characters on the screen. If the number is not whole, yields error. If the number is negative, reverse is executed on the absolute value and the sign remains (-xy -> -yx)
 * `Shift <` / `Shift >` (orange) Decimal rollover left/right shift (SLL/SRL), CAREFUL training zeroes on the right are eliminated by the shift. If the number is negative, shift is performed only on the digits and sign is kept. (**TODO:** what happens with dot?) (10 -> 1, not 01)
-* `[+] X` (orange) Add **X** to all "number buttons" (but not itself) (**TODO:** does it also work with 'substitution' button?, **TODO:** can we have negative increments?)
+* `[+] X` (orange) Add **X** to all "number buttons" (but not itself). **WARNING:** incrementing a negative number actually **decrements** it. (**TODO:** does it also work with 'substitution' button?, **TODO:** can we have negative increments?)
