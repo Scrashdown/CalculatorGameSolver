@@ -41,4 +41,8 @@ Note: all numbers in buttons are whole numbers
 * `Reverse` (orange) Reverse all characters on the screen. If the number is not whole, yields error. If the number is negative, reverse is executed on the absolute value and the sign remains (-xy -> -yx)
 * `Shift <` / `Shift >` (orange) Decimal rollover left/right shift (SLL/SRL), CAREFUL training zeroes on the right are eliminated by the shift. If the number is negative, shift is performed only on the digits and sign is kept. (**TODO:** what happens with dot?) (10 -> 1, not 01)
 * `[+] X` (orange) Add **X** to all "number buttons" (but not itself). **WARNING:** incrementing a negative number actually **decrements** it. (**TODO:** does it also work with 'substitution' button?, **TODO:** can we have negative increments?)
-* `STORE` / `RCL X` (deep purple) Can be pressed in two ways. LONG-PRESS stores the screen value in the button (**TODO:** what happens with sign and dot?), SHORT-PRESS concatenates the stored number (**if any**) on the screen (**TODO:** what happens with sign and dot?).
+* `STORE` / `RCL X` (deep purple) Can be pressed in two ways. LONG-PRESS stores the screen value in the button, SHORT-PRESS concatenates the stored number (**if any**) on the screen (**TODO:** what happens with sign and dot?, Is the stored number incremented by the increment button?).
+
+### TODO
+
+Add a system of "actions" per button. Each button provides a list of all the actions it supports (such as short press, long press, etc.). The solver then uses it to find all possible combinations of actions, and executes them. A way to describe and execute an action is therefore also needed. Maybe replace the Button.press() method by a call to Action()? This is useful to implement buttons who have different press modes.
