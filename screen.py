@@ -2,6 +2,7 @@ from typing import List
 
 MAX_SCREEN_SYMBOL_NUMBER = 6
 
+
 class ScreenNumber:
     value: float = 0.0
 
@@ -24,6 +25,7 @@ class ScreenNumber:
 
     def length(self) -> int:
         return len(ScreenNumber.str(self))
+
 
 class Screen:
     screen_number: ScreenNumber = None
