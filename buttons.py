@@ -4,6 +4,9 @@ from screen import Screen, ScreenNumber
 
 
 class Button(ABC):
+    # Must be populated with each action in __init__
+    action = []
+
     @abstractmethod
     def __repr__(self) -> str:
         pass
@@ -11,11 +14,6 @@ class Button(ABC):
     @abstractmethod
     def increment_numbers(self, increment: int) -> None:
         pass
-
-    def actions(self):
-        # Must be populated in __init__ in a manner
-        # that is unique to each button
-        return self.actions
 
     class Action(ABC):
         def __init__(self, button):
@@ -154,7 +152,7 @@ class ReplaceButton(TwoNumButton):
         self.actions = [self.Action(self)]
 
     def __repr__(self) -> str:
-        return f"{self.value1} -> {self.value2}"        
+        return f"{self.value1} -> {self.value2}"
 
     class Action(Button.Action):
         def __repr__(self) -> str:
@@ -201,9 +199,9 @@ class ConcButton(OneNumButton):
             else:
                 # Concatenate number on the right
                 new_screen_repr = (ScreenNumber.str(screen.screen_number.value) +
-                                ScreenNumber.str(self.button.value))
+                                   ScreenNumber.str(self.button.value))
 
-                screen.update_str(new_screen_repr)        
+                screen.update_str(new_screen_repr)
 
 
 class MirrorButton(NoNumButton):
@@ -232,7 +230,7 @@ class MirrorButton(NoNumButton):
             # If the number had a dot originally, it will be duplicated
             # thereby creating an invalid float repr. which will be caught
             # by Screen.update()
-            screen.update_str(new_screen_repr)        
+            screen.update_str(new_screen_repr)
 
 
 class RightShiftButton(NoNumButton):
@@ -260,7 +258,7 @@ class RightShiftButton(NoNumButton):
                     new_screen_repr = '0'
                 else:
                     new_screen_repr = screen_repr[:-1]
-                screen.update_str(new_screen_repr)        
+                screen.update_str(new_screen_repr)
 
 
 class ReverseButton(NoNumButton):
@@ -290,7 +288,7 @@ class ReverseButton(NoNumButton):
                 screen_repr = ScreenNumber.str(screen.screen_number.value)
                 # Reverse without taking the sign, but keep it
                 new_screen_repr = '-' + screen_repr[:0:-1]
-            screen.update_str(new_screen_repr)        
+            screen.update_str(new_screen_repr)
 
 
 class SumButton(NoNumButton):
@@ -317,7 +315,7 @@ class SumButton(NoNumButton):
                 sign = 1 if screen.screen_number.value >= 0 else -1
                 digits = screen_repr if sign == 1 else screen_repr[1:]
                 digit_sum: int = sum(map(int, digits))
-                screen.update_float(float(sign * digit_sum))        
+                screen.update_float(float(sign * digit_sum))
 
 
 class RSLButton(NoNumButton):
@@ -346,7 +344,7 @@ class RSLButton(NoNumButton):
                 sign = 1 if screen.screen_number.value >= 0 else -1
                 digits = screen_repr if sign == 1 else screen_repr[1:]
                 shifted = ('' if sign == 1 else '-') + digits[1:] + digits[0]
-                screen.update_str(shifted)        
+                screen.update_str(shifted)
 
 
 class RSRButton(NoNumButton):
@@ -375,7 +373,7 @@ class RSRButton(NoNumButton):
                 sign = 1 if screen.screen_number.value >= 0 else -1
                 digits = screen_repr if sign == 1 else screen_repr[1:]
                 shifted = ('' if sign == 1 else '-') + digits[-1] + digits[:-1]
-                screen.update_str(shifted)        
+                screen.update_str(shifted)
 
 
 class IncrementButtonsButton(OneNumButton):
@@ -410,6 +408,7 @@ class MemButton(OneNumButton):
         return "MEM"
 
     def increment_numbers(self, increment: int) -> None:
+        # TODO: verify this button can be incremented
         if self.value is not None:
             self.value += increment
 
@@ -427,11 +426,14 @@ class MemButton(OneNumButton):
 
     class RecallAction(Button.Action):
         def __repr__(self) -> str:
-            assert self.button.value is not None
+            if self.button.value is None:
+                # TODO: think more about what happens in this case
+                return "RCL -"
             return f"RCL {self.button.value}"
 
         def __call__(self, screen: Screen, buttons) -> None:
-            assert self.button.value is not None
+            if self.button.value is None:
+                return
             new_value = float(self.button.value)
             screen.update_float(new_value)
 
