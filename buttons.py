@@ -9,12 +9,24 @@ class Button(ABC):
         pass
 
     @abstractmethod
-    def press(self, screen: Screen, buttons) -> None:
-        pass
-
-    @abstractmethod
     def increment_numbers(self, increment: int) -> None:
         pass
+
+    def actions(self):
+        # Must be populated in __init__ in a manner that is unique to each button
+        return self.actions
+
+    class Action(ABC):
+        def __init__(self, button):
+            self.button = button
+
+        @abstractmethod
+        def __repr__(self) -> str:
+            pass
+
+        @abstractmethod
+        def __call__(self, screen: Screen, buttons) -> None:
+            pass
 
 
 class NoNumButton(Button):
@@ -42,15 +54,20 @@ class TwoNumButton(Button):
 class AddSubButton(OneNumButton):
     def __init__(self, value: int):
         self.value = value
+        self.actions = [self.Action(self)]
 
     def __repr__(self) -> str:
         return f"+{self.value}" if self.value > 0 else f"-{-self.value}"
 
-    def press(self, screen: Screen, buttons: List[Button]) -> None:
-        if screen.screen_number is None:
-            return
-        new_value: float = screen.screen_number.value + self.value
-        screen.update_float(new_value)
+    class Action(Button.Action):
+        def __repr__(self) -> str:
+            return str(self.button)
+
+        def __call__(self, screen: Screen, buttons) -> None:
+            if screen.screen_number is None:
+                return
+            new_value: float = screen.screen_number.value + self.button.value
+            screen.update_float(new_value)
 
 
 class MulButton(OneNumButton):
@@ -285,19 +302,65 @@ class RSRButton(NoNumButton):
 
 
 class IncrementButtonsButton(OneNumButton):
-    value: int
-
     def __init__(self, value: int):
         self.value = value
+        self.actions = [self.Action(self)]
 
     def __repr__(self) -> str:
         return f"[+] {self.value}" if self.value > 0 else f"[- {-self.value}"
 
+    def increment_numbers(self, increment: int) -> None:
+        # Do not increment oneself
+        pass
+
+    class Action(Button.Action):
+        def __repr__(self) -> str:
+            return str(self.button)
+
+        def __call__(self, screen: Screen, buttons) -> None:
+            if screen.screen_number is None:
+                return
+            for b in buttons:
+                b.increment_numbers(self.button.value)
+
+
+class MemButton(OneNumButton):
+    def __init__(self):
+        self.value = None
+        self.actions = [self.StoreAction(self), self.RecallAction(self)]
+
+    def __repr__(self) -> str:
+        return "MEM"
+
     def press(self, screen: Screen, buttons: List[Button]) -> None:
-        if screen.screen_number is None:
-            return
-        for b in buttons:
-            b.increment_numbers(self.value)
+        pass
 
     def increment_numbers(self, increment: int) -> None:
-        pass
+        if self.value is not None:
+            self.value += increment
+
+    class StoreAction(Button.Action):
+        def __repr__(self) -> str:
+            return "STORE"
+
+        def __call__(self, screen: Screen, buttons) -> None:
+            if not screen.screen_number.value.is_integer():
+                # Yield error if the number is not whole
+                screen.set_error()
+            else:
+                # Load value into button
+                self.button.value = int(self.screen_number.value)
+
+    class RecallAction(Button.Action):
+        def __repr__(self) -> str:
+            assert self.button.value is not None
+            return f"RCL {self.button.value}"
+
+        def __call__(self, screen: Screen, buttons) -> None:
+            assert self.button.value is not None
+            new_value = float(self.button.value)
+            screen.update_float(new_value)
+
+# TODO: remove
+test = MemButton()
+test2 = AddSubButton(3)
