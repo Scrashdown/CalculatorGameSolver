@@ -1,6 +1,6 @@
 from buttons import Button
 from screen import Screen, ScreenNumber
-from typing import List
+from typing import List, Set
 from itertools import product, chain
 
 import copy
@@ -33,41 +33,54 @@ class Level:
     def solve(self, solve_all = False, debug = False) -> List[List[Button.Action]]:
         solutions: List[List[Button.Action]] = []
 
-        # TODO: fix deepcopy hell and make sure references are correct
+        # Idea: for each combination, use list of pairs of indexes (*, *) instead of list of actions
+        # Then, for each combination, deepcopy the used buttons, and use (nb, na)
+        # where nb = # of button, na = # of action within button nb to retrieve actions
+        # from copied button list => for each combination, deepcopy (used) buttons
 
-        # Get all actions from given buttons
-        action_lists = [button.actions for button in self.buttons]
-        actions = [item for sublist in action_lists for item in sublist]
+        # Create index of buttons and actions
+        buttons_idxs = range(len(self.buttons))
+        buttons_actions_idxs = [ (bi, ai) for bi in buttons_idxs for ai in range(len(self.buttons[bi].actions)) ]
 
-        # Iterate over all possible *action* combinations
-        comb_by_len = [product(actions, repeat = l)
-                       for l in range(1, self.max_moves + 1)]
+        # Compute number of iterations without unrolling the iterator
+        num_combinations = sum([ len(buttons_actions_idxs) ** i for i in range(1, self.max_moves + 1) ])
+        percentage_reached = 0
+
+        # Iterate over all possible combinations of actions
+        comb_by_len = [ product(buttons_actions_idxs, repeat = l) for l in range(1, self.max_moves + 1) ]
         all_combinations = chain.from_iterable(comb_by_len)
-        for combination in all_combinations:
+        for (i, combination) in enumerate(all_combinations):
+            # Display progress
+            percentage = 100 * i / num_combinations
+            if percentage > percentage_reached:
+                print(f"{int(percentage_reached)}%", end = '\r')
+                percentage_reached += 1
+
+            # Deepcopy all used buttons, works because one action cannot be bound to several buttons
+            copied_buttons = copy.deepcopy(self.buttons)
+
+            # Retrieve actions from copied buttons
+            copied_actions = [ copied_buttons[bi].actions[ai] for (bi, ai) in combination ]
+
+            if debug:
+                print(f"Testing combination {copied_actions}")
+
+            # Execute actions and build tentative solution
             tentative_sol: List[Button.Action] = []
-
-            # Deep copy actions in a separate list, to keep their state at each moment,
-            # should they get modified. This is done so the solutions appear consistent
-            # to what is seen in the game. Buttons linked to the copied must be kept
-            # in a list so they can be passed to the action() call.
-            copied_combination = [copy.deepcopy(
-                action) for action in combination]
-            copied_buttons = list(
-                set([action.button for action in copied_combination]))
-
-            # TODO: error with deep copy. 2 actions that were originally linked to the same button,
-            # are now linked to 2 duplicate, BUT SEPARATE, buttons, therefore the MEM Button doesn't work.
-
-            for action in copied_combination:
-                # Deep copy action to keep its current state, should it be modified later
+            for action in copied_actions:
                 tentative_sol.append(copy.deepcopy(action))
                 action(self.screen, copied_buttons)
 
+                if debug:
+                    print(f"    action: {action}")
+                    print(f"    buttons: {copied_buttons}")
+                    print(f"    screen: {self.screen.screen_number.value}")
+                    print()
+
             if debug:
-                print(f"Testing combination {tentative_sol}:")
                 print(f"Result: {self.screen.screen_number.value}")
-                print(
-                    f"Goal: {self.goal.value}, (reached: {self.screen.screen_number.value == self.goal.value})")
+                print(f"Goal: {self.goal.value}, (reached: {self.screen.screen_number.value == self.goal.value})")
+                print()
 
             if self.screen.screen_number is not None and self.screen.screen_number.value == self.goal.value:
                 # Shallow copy tentative solution so we can clear it later without deleting it from the solution
