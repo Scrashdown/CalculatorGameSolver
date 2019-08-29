@@ -1,16 +1,15 @@
 from level import *
 from buttons import *
 
-init_screen = ScreenNumber(369)
+init_screen = Screen(ScreenNumber(3002), portal_entrance=5, portal_exit=1)
 buttons = [
-    ReplaceButton('93', '63'),
-    ReplaceButton('63', '33'),
-    ReplaceButton('36', '93'),
+    ConcButton(7),
+    ReplaceButton('3', '5'),
     Inv10Button(),
-    ReplaceButton('39', '33')
+    RSRButton()
 ]
-goal = ScreenNumber(777)
-max_moves = 5
+goal = ScreenNumber(3507)
+max_moves = 6
 
 level = Level(init_screen, buttons, goal, max_moves)
 print("Computing solutions...")
