@@ -5,7 +5,7 @@ from screen import Screen, ScreenNumber
 
 class Button(ABC):
     # Must be populated with each action in __init__
-    action = []
+    actions = []
 
     @abstractmethod
     def __repr__(self) -> str:
@@ -146,7 +146,7 @@ class PowerButton(OneNumButton):
 
 
 class ReplaceButton(TwoNumButton):
-    def __init__(self, src: int, dst: int):
+    def __init__(self, src: str, dst: str):
         self.value1 = src
         self.value2 = dst
         self.actions = [self.Action(self)]
@@ -165,8 +165,8 @@ class ReplaceButton(TwoNumButton):
             # For now, use str.replace on the screen's str representation
             # After it replaces one substring, continues on the *modified* result
             screen_repr: str = ScreenNumber.str(screen.screen_number)
-            src_repr: str = ScreenNumber.str(self.button.value1)
-            dst_repr: str = ScreenNumber.str(self.button.value2)
+            src_repr: str = self.button.value1
+            dst_repr: str = self.button.value2
 
             # Yield error if screen number is not whole
             if not screen.screen_number.value.is_integer():
@@ -193,7 +193,7 @@ class ConcButton(OneNumButton):
                 return
             # TODO: can the concatenated number have a dot or a sign?
 
-            # If the screen number contains a sign, yield error
+            # If the screen number contains a sign or a dot, yield error
             if not screen.screen_number.value.is_integer():
                 screen.set_error()
             else:
@@ -405,7 +405,7 @@ class MemButton(OneNumButton):
         self.actions = [self.StoreAction(self), self.RecallAction(self)]
 
     def __repr__(self) -> str:
-        return "MEM"
+        return "MEM - " if self.value is None else f"MEM {self.value}"
 
     def increment_numbers(self, increment: int) -> None:
         # TODO: verify this button can be incremented
@@ -417,12 +417,11 @@ class MemButton(OneNumButton):
             return "STORE"
 
         def __call__(self, screen: Screen, buttons) -> None:
-            if not screen.screen_number.value.is_integer():
-                # Yield error if the number is not whole
-                screen.set_error()
-            else:
-                # Load value into button
-                self.button.value = int(screen.screen_number.value)
+            if screen.screen_number is None:
+                return
+
+            # Load value into button
+            self.button.value = ScreenNumber.str(screen.screen_number.value)
 
     class RecallAction(Button.Action):
         def __repr__(self) -> str:
@@ -432,10 +431,19 @@ class MemButton(OneNumButton):
             return f"RCL {self.button.value}"
 
         def __call__(self, screen: Screen, buttons) -> None:
-            if self.button.value is None:
+            if self.button.value is None or screen.screen_number is None:
                 return
-            new_value = float(self.button.value)
-            screen.update_float(new_value)
+            # TODO: can the concatenated number have a dot or a sign?
+
+            # If the screen number contains a sign or a dot, yield error
+            if not screen.screen_number.value.is_integer():
+                screen.set_error()
+            else:
+                # Concatenate number on the right
+                new_screen_repr = (ScreenNumber.str(screen.screen_number.value) +
+                                   ScreenNumber.str(self.button.value))
+
+                screen.update_str(new_screen_repr)
 
 
 # TODO: remove these tests later
