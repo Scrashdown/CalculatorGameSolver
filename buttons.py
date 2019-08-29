@@ -446,6 +446,24 @@ class MemButton(OneNumButton):
                 screen.update_str(new_screen_repr)
 
 
-# TODO: remove these tests later
-test = MemButton()
-test2 = AddSubButton(3)
+class Inv10Button(NoNumButton):
+    def __init__(self):
+        self.actions = [self.Action(self)]
+
+    def __repr__(self) -> str:
+        return "Inv10"
+
+    class Action(Button.Action):
+        def __repr__(self) -> str:
+            return str(self.button)
+
+        def __call__(self, screen: Screen, buttons) -> None:
+            if screen.screen_number is None:
+                return
+
+            # TODO: what happens with dot?
+
+            screen_repr = ScreenNumber.str(screen.screen_number.value)
+            new_screen_repr = ''.join([ (str(10 - int(d)) if d.isdigit() and int(d) > 0 else d) for d in screen_repr ])
+            screen.update_str(new_screen_repr)
+
