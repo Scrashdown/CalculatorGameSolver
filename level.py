@@ -15,14 +15,14 @@ class Level:
     goal: ScreenNumber = None
     max_moves: int = 0
 
-    def __init__(self, init_number: ScreenNumber, buttons: List[Button],
+    def __init__(self, screen: Screen, buttons: List[Button],
                  goal: ScreenNumber, max_moves: int):
-        assert init_number is not None
+        assert screen is not None
         assert buttons != set() and buttons is not None
         assert max_moves > 0
 
         # Store defaults
-        self.init_screen = Screen(init_number)
+        self.init_screen = screen
 
         # Copy defaults to game variables and initialize the rest
         self.screen = copy.deepcopy(self.init_screen)

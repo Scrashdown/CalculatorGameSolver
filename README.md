@@ -24,7 +24,7 @@ Any number
 
 **TODO:**
 * Should the goal always be a whole number?
-* Check levels 84, 85, 153, 155, 173, 174, 177, 178, many solutions
+* Check levels 84, 85, 153, 155, 173, 174, 177, 178, 188, 192, 196, 198, many solutions
 
 ## Buttons
 
@@ -43,6 +43,12 @@ Note: all numbers in buttons are whole numbers
 * `[+] X` (orange) Add **X** to all "number buttons" (but not itself). **WARNING:** incrementing a negative number actually **decrements** it. (**TODO:** does it also work with 'substitution' button?, **TODO:** can we have negative increments?)
 * `STORE` / `RCL X` (deep purple) Can be pressed in two ways. LONG-PRESS stores the screen value in the button, SHORT-PRESS concatenates the stored number (**if any**) on the screen. Can store a negative or float number. ERROR if RCL a float. (**TODO:** Is the stored number incremented by the increment button? **TODO:** weird behaviour with a negative stored number, moves count goes < 0, changes by itself, inconsistent, maybe a bug?).
 * `Inv10` (orange) For each digit `n` in the screen number, replaces it with `10 - n`. /!\ 0 -> 0. Sign is ignored. (**TODO:** what happens with dot?)
+
+## Portal
+
+The screen may contain a (several?) portal. One position on the screen is the entrance, and another is the exit. _"Numbers go in a portal, then come out and added to the other end."_ (whatever that means) Operates in a loop until there is nothing left to suck. **TODO:** should the exit always be before/after the entrance? Does it suck only one digit? Or all digits after/before the entrance? The entrance seems to always start beyond the left end of the number.
+
+If the portal acts on a number that is not whole, the game either freezes or gives seemingly non-sensical output -> ERROR in that case
 
 ### TODO
 
