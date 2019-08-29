@@ -1,6 +1,10 @@
 # CalculatorGameSolver
 Solver for Calculator: the Game
 
+## Usage
+
+_Coming when I have time..._ meanwhile you use the `test.py` file and try to understand the code.
+
 ## Game description
 The game is made of a multitude of levels. In each level you have a number
 on the screen of a calculator, some buttons, a goal number to be reached,
@@ -20,11 +24,7 @@ if it can't display a number.
 Whole number > 0
 
 ## Goal
-Any number
-
-**TODO:**
-* Should the goal always be a whole number?
-* Check levels 84, 85, 153, 155, 173, 174, 177, 178, 188, 192, 196, 198, many solutions
+Any whole number. _All levels encountered had a whole number goal._
 
 ## Buttons
 
@@ -41,15 +41,17 @@ Note: all numbers in buttons are whole numbers
 * `Reverse` (orange) Reverse all characters on the screen. If the number is not whole, yields error. If the number is negative, reverse is executed on the absolute value and the sign remains (-xy -> -yx)
 * `Shift <` / `Shift >` (orange) Decimal rollover left/right shift (SLL/SRL), CAREFUL training zeroes on the right are eliminated by the shift. If the number is negative, shift is performed only on the digits and sign is kept. (**TODO:** what happens with dot?) (10 -> 1, not 01)
 * `[+] X` (orange) Add **X** to all "number buttons" (but not itself). **WARNING:** incrementing a negative number actually **decrements** it. (**TODO:** does it also work with 'substitution' button?, **TODO:** can we have negative increments?)
-* `STORE` / `RCL X` (deep purple) Can be pressed in two ways. LONG-PRESS stores the screen value in the button, SHORT-PRESS concatenates the stored number (**if any**) on the screen. Can store a negative or float number. ERROR if RCL a float. (**TODO:** Is the stored number incremented by the increment button? **TODO:** weird behaviour with a negative stored number, moves count goes < 0, changes by itself, inconsistent, maybe a bug?).
+* `STORE` / `RCL X` (deep purple) Can be pressed in two ways. LONG-PRESS stores the screen value in the button, SHORT-PRESS concatenates the stored number, _if any_, on the screen. Can store a negative or float number. ERROR if RCL a float. (**TODO:** Is the stored number incremented by the increment button? **TODO:** weird behaviour with a negative stored number, moves count goes < 0, changes by itself, inconsistent, maybe a bug?).
 * `Inv10` (orange) For each digit `n` in the screen number, replaces it with `10 - n`. /!\ 0 -> 0. Sign is ignored. (**TODO:** what happens with dot?)
 
 ## Portal
 
-The screen may contain a (several?) portal. One position on the screen is the entrance, and another is the exit. _"Numbers go in a portal, then come out and added to the other end."_ (whatever that means) Operates in a loop until there is nothing left to suck. **TODO:** should the exit always be before/after the entrance? Does it suck only one digit? Or all digits after/before the entrance? The entrance seems to always start beyond the left end of the number.
+The screen may contain a (several?) portal. One position on the screen is the entrance, and another is the exit. _"Numbers go in a portal, then come out and added to the other end."_ (whatever that means). Operates in a loop until there is nothing left to suck. The portal's entrance is always comes first, starting from the left of the number.
 
-If the portal acts on a number that is not whole, the game either freezes or gives seemingly non-sensical output -> ERROR in that case
+If the portal acts on a number that is not whole, the game either freezes or gives seemingly non-sensical output -> `ERROR` in that case.
 
-### TODO
-
-Add a system of "actions" per button. Each button provides a list of all the actions it supports (such as short press, long press, etc.). The solver then uses it to find all possible combinations of actions, and executes them. A way to describe and execute an action is therefore also needed. Maybe replace the Button.press() method by a call to Action()? This is useful to implement buttons who have different press modes.
+### Other TODOs
+* Clarify TODOs questions in the button's descriptions
+* Check levels 84, 85, 153, 155, 173, 174, 177, 178, 188, 192, 196, 198, because they appear to have many solutions
+* Load levels from a text file or stdin, output results to a file or stdout
+* Better terminal interface and feedback (help, etc.)
