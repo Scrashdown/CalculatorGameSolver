@@ -24,7 +24,7 @@ Any number
 
 **TODO:**
 * Should the goal always be a whole number?
-* Check levels 84, 85, many solutions
+* Check levels 84, 85, 153, 155, many solutions
 
 ## Buttons
 
@@ -41,7 +41,7 @@ Note: all numbers in buttons are whole numbers
 * `Reverse` (orange) Reverse all characters on the screen. If the number is not whole, yields error. If the number is negative, reverse is executed on the absolute value and the sign remains (-xy -> -yx)
 * `Shift <` / `Shift >` (orange) Decimal rollover left/right shift (SLL/SRL), CAREFUL training zeroes on the right are eliminated by the shift. If the number is negative, shift is performed only on the digits and sign is kept. (**TODO:** what happens with dot?) (10 -> 1, not 01)
 * `[+] X` (orange) Add **X** to all "number buttons" (but not itself). **WARNING:** incrementing a negative number actually **decrements** it. (**TODO:** does it also work with 'substitution' button?, **TODO:** can we have negative increments?)
-* `STORE` / `RCL X` (deep purple) Can be pressed in two ways. LONG-PRESS stores the screen value in the button, SHORT-PRESS concatenates the stored number (**if any**) on the screen (**TODO:** what happens with sign and dot?, Is the stored number incremented by the increment button?).
+* `STORE` / `RCL X` (deep purple) Can be pressed in two ways. LONG-PRESS stores the screen value in the button, SHORT-PRESS concatenates the stored number (**if any**) on the screen. Can store a negative or float number. ERROR if RCL a float. (**TODO:** Is the stored number incremented by the increment button? **TODO:** weird behaviour with a negative stored number, moves count goes < 0, changes by itself, inconsistent, maybe a bug?).
 
 ### TODO
 
