@@ -6,7 +6,7 @@ from itertools import product, chain
 import copy
 
 
-class Level:
+class Solver:
     init_screen: Screen = None
     init_buttons: List[Button] = []
 
