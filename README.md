@@ -63,3 +63,4 @@ If the portal acts on a number that is not whole, the game either freezes or giv
 * Better terminal interface and feedback (help, etc.)
 * Optimize solver to reduce the number of tested solutions (for example, impossible, or 'dummy' solutions that are not feasible because they contain a prefix which is already a solution). Could also use some sort of a tree to avoid pressing buttons that change nothing, at a given time 🤔
 * Maybe switch to an all-int representation. This would be cleaner, and so far I haven't seen any solution involving floats (check that thoroughly!)
+* Add benchmarking!
