@@ -11,7 +11,8 @@ buttons = [
 goal = ScreenNumber(3507)
 max_moves = 6
 
-level = Solver(init_screen, buttons, goal, max_moves)
+level = Level(init_screen, buttons, goal, max_moves)
+solver = Solver()
 print("Computing solutions...")
-solutions = list(level.solve(solve_all = True, debug = False))
+solutions = list(solver(level, solve_all = True, debug = False))
 print(f"Result:\n    {solutions}")
