@@ -1,57 +1,65 @@
 # CalculatorGameSolver
-Solver for Calculator: the Game
+Solver for _Calculator: The Game_, just for fun.
 
 ## Usage
 
-_Coming when I have time..._ meanwhile you use the `test.py` file and try to understand the code.
+_Coming when I have time..._ meanwhile please use the `test.py` file and try to understand the code.
 
-## Game description
+### Level parameters
+TODO
+
+### Button patterns
+TODO
+
+## Game description and rules (partly reverse-engineered / guessed)
 The game is made of a multitude of levels. In each level you have a number
 on the screen of a calculator, some buttons, a goal number to be reached,
 and the maximum allowed number of moves required for passing the level.
 
-## Screen
+### Screen
 Can contain any positive, negative decimal number, with or without decimal point
 as long as its exact representation fits on the screen. Can also display `ERROR`
 if it can't display a number.
 
-**TODO:**
+#### TODO:
 * Check if this is true
 * Check the maximum numbers of symbols (appears to be 6, check thoroughly)
 * Check if the minus sign and decimal point are counted in the number of displayed symbols
 
-## Maximum number of moves
+### Maximum number of moves
 Whole number > 0
 
-## Goal
+### Goal
 Any whole number. _All levels encountered had a whole number goal._
 
-## Buttons
+### Buttons
+<!-- Thanks https://www.tablesgenerator.com/markdown_tables# for the pretty awesome Markdown table generator. -->
 
-Note: all numbers in buttons are whole numbers
+| Button pattern(s)         | Colour        | Description                                                                                                                                                                                                                | TODO / unclear behaviour / notes                                                                                                                               |
+|---------------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `+X` / `-X` / `xX` / `/X` | (dark gray)   | Add / subtract / multiply / divide by `X`.                                                                                                                                                                                 |                                                                                                                                                                |
+| `+/-`                     | (orange)      | Switch number sign.                                                                                                                                                                                                        |                                                                                                                                                                |
+| `x^P`                     | (orange)      | Raise number to power `P`.                                                                                                                                                                                                 | What happens with dot and sign?                                                                                                                                |
+| `X -> Y`                  | (orange)      | Replace all occurrences of sequence `X` to sequence `Y`, if the screen number is not an integer, yields ERROR.                                                                                                             | Can `X` and `Y` overlap? Can they be negative?                                                                                                                 |
+| `X`                       | (purple)      | Concatenate `X` on the right, if the number is not whole, yields ERROR.                                                                                                                                                    | Can `X` be negative or not an integer?                                                                                                                           |
+| `MIRROR`                  | (orange)      | Concatenate on the right a mirrored version of the current number. `-X` -> `-XX`. A float yields ERROR.                                                                                                                    |                                                                                                                                                                |
+| `SUM`                     | (orange)      | Replaces the number of the screen with the sum of its digits. If the number is not whole, yields ERROR. If negative, `SUM(-X) = -SUM(X)`.                                                                                  |                                                                                                                                                                |
+| `<<`                      | (orange)      | Decimal shift to the right. `XY` -> `X`, `X` -> `0`. Negative number yields ERROR.                                                                                                                                         |                                                                                                                                                                |
+| `Reverse`                 | (orange)      | Reverse digits of the number on the screen. Float numbers yield ERROR. If the number is negative `REV(-XY) = -REV(XY) = -YX`.                                                                                              |                                                                                                                                                                |
+| `Shift <` / `Shift >`     | (orange)      | Decimal left/right circular shift. Trailing zeroes are eliminated. If the number is negative, `SHIFT(-X) = -SHIFT(X)`.                                                                                                     | What happens with float numbers? Verify statement about trailing zeroes.                                                                                       |
+| `[+] X`                   | (orange)      | Increment all numbers in buttons by `X` (except this one). Negative numbers are decremented (i.e. `-1` -> `-1-X`).                                                                                                         | What happens with buttons containing floats? Does the substitution button also get incremented? Can `X` be negative?                                           |
+| `STORE` (`RCL X`)         | (deep purple) | Two modes. _Long press_ stores the screen value in the button. _Short press_ concatenates the stored number `X` on the screen, on the right, _if any_. Can store a negative or float number. Recalling a float yields ERROR. | Is `X` incremented by the increment button? Weird behaviour with a negative stored number, moves count goes < 0, changes by itself, inconsistent, maybe a bug? |
+| `Inv10`                   | (orange)      | For each digit `d` in the screen number, replaces it with `10 - d`. `0` -> `0`. `-` -> `-`.                                                                                                                                | What happens with float numbers?                                                                                                                               |
 
-* `+X` / `-X` / `xX` / `/X` (dark gray) Add / subtract / multiply / divide by X
-* `+/-` (orange) Switch number sign
-* `x^P` (orange) Raise number to power P (**TODO:** what happens with dot and sign?)
-* `X -> Y` (orange) Replace all occurrences of sequence X to sequence Y, if the screen number is not whole, this yields error (**TODO:** what if these sequences can be overlapping?, can any sequence be negative? E.g. 11 in 111)
-* `X` (purple) Concatenate **X** on the right, if the number has a dot, yields ERROR. (**TODO:** can X have minus sign or a dot?)
-* `MIRROR` (orange) Concatenate on the right a mirrored version of the current numbers. If there is a minus sign, -x becomes -xx. If there is a dot, we get ERROR.
-* `SUM` (orange) Sum of all numbers on the screen. If the number is not whole, yields error. If the number is negative, yields - the sum of the digits (-12 -> -3).
-* `<<` (orange) Right decimal shift (if only one number remaining, positive or negative, becomes 0. If the number is negative, yields error.)
-* `Reverse` (orange) Reverse all characters on the screen. If the number is not whole, yields error. If the number is negative, reverse is executed on the absolute value and the sign remains (-xy -> -yx)
-* `Shift <` / `Shift >` (orange) Decimal rollover left/right shift (SLL/SRL), CAREFUL training zeroes on the right are eliminated by the shift. If the number is negative, shift is performed only on the digits and sign is kept. (**TODO:** what happens with dot?) (10 -> 1, not 01)
-* `[+] X` (orange) Add **X** to all "number buttons" (but not itself). **WARNING:** incrementing a negative number actually **decrements** it. (**TODO:** does it also work with 'substitution' button?, **TODO:** can we have negative increments?)
-* `STORE` / `RCL X` (deep purple) Can be pressed in two ways. LONG-PRESS stores the screen value in the button, SHORT-PRESS concatenates the stored number, _if any_, on the screen. Can store a negative or float number. ERROR if RCL a float. (**TODO:** Is the stored number incremented by the increment button? **TODO:** weird behaviour with a negative stored number, moves count goes < 0, changes by itself, inconsistent, maybe a bug?).
-* `Inv10` (orange) For each digit `n` in the screen number, replaces it with `10 - n`. /!\ 0 -> 0. Sign is ignored. (**TODO:** what happens with dot?)
+### Portal
 
-## Portal
+The screen may contain a portal. It consists of 2 positions on the screen. One is the entrance, and the other is the exit. _"Numbers go in a portal, then come out and added to the other end."_ (whatever that means). Operates in a loop until there is no digit left to suck. The portal's entrance is always comes first, starting from the left of the number.
 
-The screen may contain a (several?) portal. One position on the screen is the entrance, and another is the exit. _"Numbers go in a portal, then come out and added to the other end."_ (whatever that means). Operates in a loop until there is nothing left to suck. The portal's entrance is always comes first, starting from the left of the number.
+If the portal acts on a number that is not whole, the game either freezes or gives seemingly non-sensical output -> `ERROR` in that case for lack of a better option.
 
-If the portal acts on a number that is not whole, the game either freezes or gives seemingly non-sensical output -> `ERROR` in that case.
-
-### Other TODOs
-* Clarify TODOs questions in the button's descriptions
+## Other TODOs
 * Check levels 84, 85, 153, 155, 173, 174, 177, 178, 188, 192, 196, 198, because they appear to have many solutions
 * Load levels from a text file or stdin, output results to a file or stdout
 * Better terminal interface and feedback (help, etc.)
+* Optimize solver to reduce the number of tested solutions (for example, impossible, or 'dummy' solutions that are not feasible because they contain a prefix which is already a solution)
+* Maybe switch to an all-int representation. This would be cleaner, and so far I haven't seen any solution involving floats (check that thoroughly!)
