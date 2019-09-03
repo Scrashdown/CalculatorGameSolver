@@ -105,6 +105,10 @@ class DivButton(OneNumButton):
     def __repr__(self) -> str:
         return f"/{self.value}"
 
+    @staticmethod
+    def instantiate(repr: str) -> Button:
+        return DivButton(int(repr[1:]))
+
     class Action(Button.Action):
         def __repr__(self) -> str:
             return str(self.button)
@@ -122,6 +126,10 @@ class SwitchSignButton(NoNumButton):
 
     def __repr__(self) -> str:
         return "+/-"
+
+    @staticmethod
+    def instantiate(_) -> Button:
+        return SwitchSignButton()
 
     class Action(Button.Action):
         def __repr__(self) -> str:
@@ -142,6 +150,10 @@ class PowerButton(OneNumButton):
     def __repr__(self) -> str:
         return f"x^{self.value}"
 
+    @staticmethod
+    def instantiate(repr: str) -> Button:
+        return PowerButton(int(repr[2:]))
+
     class Action(Button.Action):
         def __repr__(self) -> str:
             return str(self.button)
@@ -161,7 +173,12 @@ class ReplaceButton(TwoNumButton):
         self.actions = [self.Action(self)]
 
     def __repr__(self) -> str:
-        return f"{self.value1} -> {self.value2}"
+        return f"{self.value1} => {self.value2}"
+
+    @staticmethod
+    def instantiate(repr: str) -> Button:
+        start, end = repr.split('=>')
+        return ReplaceButton(start.strip(), end.strip())
 
     class Action(Button.Action):
         def __repr__(self) -> str:
@@ -192,6 +209,10 @@ class ConcButton(OneNumButton):
 
     def __repr__(self) -> str:
         return f"{self.value}"
+
+    @staticmethod
+    def instantiate(repr: str) -> Button:
+        return ConcButton(int(repr))
 
     class Action(Button.Action):
         def __repr__(self) -> str:
@@ -248,6 +269,10 @@ class RightShiftButton(NoNumButton):
 
     def __repr__(self) -> str:
         return "<<"
+
+    @staticmethod
+    def instantiate(_) -> Button:
+        return RightShiftButton()
 
     class Action(Button.Action):
         def __repr__(self) -> str:
@@ -484,8 +509,8 @@ button_regex = {
     MulButton: r'x-?[1-9][0-9]*', # TODO: Allow x0?
     DivButton: r'/-?[1-9][0-9]*',
     SwitchSignButton: r'\+/-',
-    PowerButton: r'x^[1-9][0-9]*', # TODO: Allow ^0?
-    ReplaceButton: r'-?[0-9]+ -> -?[0-9]+',
+    PowerButton: r'x\^[1-9][0-9]*', # TODO: Allow ^0?
+    ReplaceButton: r'-?[0-9]+ *=> *-?[0-9]+',
     ConcButton: r'[0-9]+', # TODO: Allow e.g. 01?
     MirrorButton: r'MIRROR',
     SumButton: r'SUM',

@@ -88,6 +88,9 @@ class LevelParser:
         with open(namespace.input_file) as input_file:
             levels = []
             for line in input_file:
+                # Ignore comments
+                if line.startswith('#'):
+                    continue
                 # Turn line into a list of arguments
                 split = line.split("'")
                 buttons: str = split[1]
