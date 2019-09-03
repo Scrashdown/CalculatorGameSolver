@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 MAX_SCREEN_SYMBOL_NUMBER = 6
 
@@ -78,12 +78,12 @@ class Screen:
     max_symbol_number: int = MAX_SCREEN_SYMBOL_NUMBER
     error_message: str = "ERROR"
 
-    def __init__(self, number: ScreenNumber, portal_entrance: int = None, portal_exit: int = None):
+    def __init__(self, number: ScreenNumber, portal: Tuple[int] = None):
         # Set screen with number
         self.update(number)
         # Create portal if both arguments are valid
-        if portal_entrance is not None and portal_exit is not None:
-            self.portal = Portal(portal_entrance, portal_exit, self.max_symbol_number)
+        if portal is not None:
+            self.portal = Portal(portal[0], portal[1], self.max_symbol_number)
 
     def update(self, number: ScreenNumber) -> None:
         # Check that the number fits

@@ -8,12 +8,13 @@ import copy
 
 class Level:
     init_screen: Screen = None
-    init_buttons: List[Button] = []
 
     screen: Screen = None
     buttons: List[Button] = []
     goal: ScreenNumber = None
     max_moves: int = 0
+
+    repr_format = "Level(\n    init_screen = {},\n    init_buttons = {},\n    goal = {},\n    max_moves = {}\n)"
 
     def __init__(self, screen: Screen, buttons: List[Button],
                  goal: ScreenNumber, max_moves: int):
@@ -29,3 +30,6 @@ class Level:
         self.buttons = buttons
         self.goal = goal
         self.max_moves = max_moves
+
+    def __repr__(self) -> str:
+        return self.repr_format.format(self.init_screen, self.buttons, self.goal, self.max_moves)

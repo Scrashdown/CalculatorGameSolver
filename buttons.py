@@ -58,6 +58,10 @@ class AddSubButton(OneNumButton):
     def __repr__(self) -> str:
         return f"+{self.value}" if self.value > 0 else f"-{-self.value}"
 
+    @staticmethod
+    def instantiate(repr: str) -> Button:
+        return AddSubButton(int(repr))
+
     class Action(Button.Action):
         def __repr__(self) -> str:
             return str(self.button)
@@ -76,6 +80,10 @@ class MulButton(OneNumButton):
 
     def __repr__(self) -> str:
         return f"x{self.value}"
+
+    @staticmethod
+    def instantiate(repr: str) -> Button:
+        return MulButton(int(repr[1:]))
 
     class Action(Button.Action):
         def __repr__(self) -> str:
@@ -145,6 +153,7 @@ class PowerButton(OneNumButton):
             screen.update_float(new_value)
 
 
+# TODO: TwoNum or NoNum?
 class ReplaceButton(TwoNumButton):
     def __init__(self, src: str, dst: str):
         self.value1 = src
@@ -467,3 +476,24 @@ class Inv10Button(NoNumButton):
             new_screen_repr = ''.join([ (str(10 - int(d)) if d.isdigit() and int(d) > 0 else d) for d in screen_repr ])
             screen.update_str(new_screen_repr)
 
+
+# Add your new class here too
+# TODO: accept floats?
+button_regex = {
+    AddSubButton: r'[+-][1-9][0-9]*',
+    MulButton: r'x-?[1-9][0-9]*', # TODO: Allow x0?
+    DivButton: r'/-?[1-9][0-9]*',
+    SwitchSignButton: r'\+/-',
+    PowerButton: r'x^[1-9][0-9]*', # TODO: Allow ^0?
+    ReplaceButton: r'-?[0-9]+ -> -?[0-9]+',
+    ConcButton: r'[0-9]+', # TODO: Allow e.g. 01?
+    MirrorButton: r'MIRROR',
+    SumButton: r'SUM',
+    RightShiftButton: r'<<',
+    ReverseButton: r'Reverse',
+    RSLButton: r'Shift <',
+    RSRButton: r'Shift >',
+    IncrementButtonsButton: r'\[\+\] [1-9][0-9]*', # TODO: Allow < 0 increment?
+    MemButton: r'STORE',
+    Inv10Button: r'Inv10'
+}
