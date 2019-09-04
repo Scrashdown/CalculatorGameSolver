@@ -302,6 +302,10 @@ class ReverseButton(NoNumButton):
     def __repr__(self) -> str:
         return "Reverse"
 
+    @staticmethod
+    def instantiate(_) -> Button:
+        return ReverseButton()
+
     class Action(Button.Action):
         def __repr__(self) -> str:
             return str(self.button)
@@ -331,6 +335,10 @@ class SumButton(NoNumButton):
 
     def __repr__(self) -> str:
         return "SUM"
+
+    @staticmethod
+    def instantiate(_) -> Button:
+        return SumButton()
 
     class Action(Button.Action):
         def __repr__(self) -> str:
