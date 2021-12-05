@@ -8,6 +8,7 @@ levels = level_parser.parse_args()
 print("Solving...")
 solver = Solver()
 for (i, l) in enumerate(levels):
-    print(f"    Level {i+1}:")
+    print(f"    Level {i+1} solutions:")
     solutions = solver.solve(l, solve_all=True)
-    print(f"    Solution: {solutions}")
+    for s in solutions:
+        print(f"        {s}")

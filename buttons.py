@@ -241,6 +241,10 @@ class MirrorButton(NoNumButton):
     def __repr__(self) -> str:
         return "MIRROR"
 
+    @staticmethod
+    def instantiate(repr: str) -> Button:
+        return MirrorButton()
+
     class Action(Button.Action):
         def __repr__(self) -> str:
             return str(self.button)
@@ -367,6 +371,10 @@ class RSLButton(NoNumButton):
     def __repr__(self) -> str:
         return "Shift <"
 
+    @staticmethod
+    def instantiate(repr: str) -> Button:
+        return RSLButton()
+
     class Action(Button.Action):
         def __repr__(self) -> str:
             return str(self.button)
@@ -395,6 +403,10 @@ class RSRButton(NoNumButton):
 
     def __repr__(self) -> str:
         return "Shift >"
+
+    @staticmethod
+    def instantiate(repr: str) -> Button:
+        return RSRButton()
 
     class Action(Button.Action):
         def __repr__(self) -> str:
@@ -426,6 +438,10 @@ class IncrementButtonsButton(OneNumButton):
     def __repr__(self) -> str:
         return f"[+] {self.value}" if self.value > 0 else f"[- {-self.value}"
 
+    @staticmethod
+    def instantiate(repr: str) -> Button:
+        return IncrementButtonsButton(int(repr[3:]))
+
     def increment_numbers(self, increment: int) -> None:
         # Do not increment oneself
         pass
@@ -448,6 +464,10 @@ class MemButton(OneNumButton):
 
     def __repr__(self) -> str:
         return "MEM - " if self.value is None else f"MEM {self.value}"
+
+    @staticmethod
+    def instantiate(repr: str) -> Button:
+        return MemButton()
 
     def increment_numbers(self, increment: int) -> None:
         # TODO: verify this button can be incremented
@@ -494,6 +514,10 @@ class Inv10Button(NoNumButton):
 
     def __repr__(self) -> str:
         return "Inv10"
+
+    @staticmethod
+    def instantiate(repr: str) -> Button:
+        return Inv10Button()
 
     class Action(Button.Action):
         def __repr__(self) -> str:
